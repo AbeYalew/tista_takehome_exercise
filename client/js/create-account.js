@@ -36,7 +36,10 @@ function submit(formData) {
     if (res.success) {
       displaySuccessMessage();
     }
-  }).fail(function(err) {});
+  }).fail(function(err){
+//displaying error message if there email is already exists.
+    displayErrors(["The email already exists!"]);
+  });
 }
 
 function validate(formData) {
@@ -67,14 +70,21 @@ function validateEmail(value) {
     errors.push('Invalid email.');
   }
 
+
   return errors;
 }
 
 function validatePassword(value) {
   var errors = [];
+  //this characters are not allowed
+  var regex = /[=?<>()'"\/\\&]/;
 
-  if (value.length < 8) {
+  if (value.length < 8 ) {
     errors.push('Password must be at least 8 characters long.');
+  }
+  //check if the password input mach the requirement in the server
+  if (regex.test(value)){
+      errors.push(`Password can not contain one of these characters =\?<>()'"\/\\& `);
   }
 
   return errors;
